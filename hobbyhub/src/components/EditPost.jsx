@@ -1,11 +1,34 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { posts } from '../data';
 import { useState } from 'react';
+import { getCurrentUser, canEditPost } from '../utils/userSession';
 
 export default function EditPost() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const currentUser = getCurrentUser();
   const post = posts.find(p => p.id === Number(id));
+
+  if (!post) {
+    return (
+      <div className="container">
+        <h2>Post not found</h2>
+        <button onClick={() => navigate('/')}>← Back to Home</button>
+      </div>
+    );
+  }
+
+  if (!canEditPost(post.author)) {
+    return (
+      <div className="container">
+        <h2>❌ Access Denied</h2>
+        <p>You do not have permission to edit this post.</p>
+        <p>This post was created by <strong>{post.author}</strong></p>
+        <button onClick={() => navigate(`/post/${post.id}`)}>← Back to Post</button>
+      </div>
+    );
+  }
+
   const [title, setTitle] = useState(post.title);
   const [content, setContent] = useState(post.content);
   const [image, setImage] = useState(post.image);

@@ -6,10 +6,17 @@ export default function PostCard({ post }) {
       <Link to={`/post/${post.id}`}><h3>{post.title}</h3></Link>
       <p className="post-card">{post.content.substring(0, 100)}...</p>
       
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem' }}>
-        <span style={{ fontSize: '0.9rem', color: '#888' }}>
-          📅 {new Date(post.createdAt).toLocaleDateString()}
-        </span>
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'space-between', 
+        alignItems: 'center', 
+        marginTop: '1rem',
+        flexWrap: 'wrap',
+        gap: '0.5rem'
+      }}>
+        <div style={{ fontSize: '0.9rem', color: '#888' }}>
+          👤 <strong>{post.author || 'Anonymous'}</strong> • 📅 {new Date(post.createdAt).toLocaleDateString()}
+        </div>
         <span style={{ fontSize: '1rem' }}>
           👍 {post.upvotes}
         </span>
