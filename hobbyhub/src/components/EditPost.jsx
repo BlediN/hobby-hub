@@ -20,12 +20,44 @@ export default function EditPost() {
 
   return (
     <div className="container">
-      <h2>Edit Post</h2>
+      <button onClick={() => navigate(`/post/${post.id}`)}>← Back to Post</button>
+      
+      <h2>✏️ Edit Post</h2>
+      
       <form onSubmit={handleUpdate}>
-        <input required value={title} onChange={(e) => setTitle(e.target.value)} />
-        <textarea value={content} onChange={(e) => setContent(e.target.value)} />
-        <input value={image} onChange={(e) => setImage(e.target.value)} />
-        <button type="submit">Update</button>
+        <div>
+          <label htmlFor="title">Title</label>
+          <input 
+            id="title"
+            required 
+            placeholder="Enter post title"
+            value={title} 
+            onChange={(e) => setTitle(e.target.value)} 
+          />
+        </div>
+
+        <div>
+          <label htmlFor="content">Content</label>
+          <textarea 
+            id="content"
+            placeholder="Write your hobby post content here..."
+            value={content} 
+            onChange={(e) => setContent(e.target.value)}
+            rows="6"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="image">Image URL</label>
+          <input 
+            id="image"
+            placeholder="https://example.com/image.jpg"
+            value={image} 
+            onChange={(e) => setImage(e.target.value)} 
+          />
+        </div>
+
+        <button type="submit">💾 Update Post</button>
       </form>
     </div>
   );

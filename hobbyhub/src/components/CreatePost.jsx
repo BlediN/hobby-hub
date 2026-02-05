@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { posts } from '../data';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 export default function CreatePost() {
   const [title, setTitle] = useState('');
@@ -25,12 +25,45 @@ export default function CreatePost() {
 
   return (
     <div className="container">
-      <h2>Create a New Post</h2>
+      <Link to="/"><button>← Back to Home</button></Link>
+      
+      <h2>✨ Create a New Post</h2>
+      <p>Share your hobby with the community!</p>
+
       <form onSubmit={handleSubmit}>
-        <input required placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)} />
-        <textarea placeholder="Content" value={content} onChange={(e) => setContent(e.target.value)} />
-        <input placeholder="Image URL" value={image} onChange={(e) => setImage(e.target.value)} />
-        <button type="submit">Create</button>
+        <div>
+          <label htmlFor="title">Post Title</label>
+          <input 
+            id="title"
+            required 
+            placeholder="What's your hobby about?"
+            value={title} 
+            onChange={(e) => setTitle(e.target.value)} 
+          />
+        </div>
+
+        <div>
+          <label htmlFor="content">Content</label>
+          <textarea 
+            id="content"
+            placeholder="Share your thoughts, tips, and experiences about your hobby..."
+            value={content} 
+            onChange={(e) => setContent(e.target.value)}
+            rows="6"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="image">Image URL (optional)</label>
+          <input 
+            id="image"
+            placeholder="https://example.com/image.jpg"
+            value={image} 
+            onChange={(e) => setImage(e.target.value)} 
+          />
+        </div>
+
+        <button type="submit">📤 Post</button>
       </form>
     </div>
   );

@@ -178,7 +178,7 @@ export default function PostPage() {
     return (
       <div className="container">
         <h2>Post not found</h2>
-        <button onClick={() => navigate('/')}>Back to Posts</button>
+        <button onClick={() => navigate('/')}>← Back to Posts</button>
       </div>
     );
   }
@@ -203,43 +203,63 @@ export default function PostPage() {
   };
 
   return (
-    <div className="container">
+    <div className="container post-page">
       <button onClick={() => navigate('/')}>← Back to Posts</button>
 
       <h2>{post.title}</h2>
-      <p>{post.content}</p>
-
+      
       {post.image && post.image.startsWith('http') ? (
         <img
           src={post.image}
           alt="Post"
-          width="300"
           onError={(e) => {
             e.target.onerror = null;
             e.target.style.display = 'none';
           }}
         />
-      ) : (
-        <p>No image available</p>
-      )}
+      ) : null}
 
-      <p>Upvotes: {upvotes}</p>
-      <button onClick={handleUpvote}>Upvote</button>
-      <button onClick={() => navigate(`/edit/${post.id}`)}>Edit</button>
-      <button onClick={handleDelete}>Delete</button>
+      <p>{post.content}</p>
 
-      <h3>Comments</h3>
-      <ul>
-        {comments.map((c, i) => (
-          <li key={i}>{c}</li>
-        ))}
-      </ul>
-      <input
-        value={comment}
-        onChange={(e) => setComment(e.target.value)}
-        placeholder="Add comment"
-      />
-      <button onClick={handleComment}>Comment</button>
+      <div className="post-meta">
+        <div className="post-meta-item">
+          <span className="post-meta-label">Upvotes</span>
+          <span className="post-meta-value">👍 {upvotes}</span>
+        </div>
+        <div className="post-meta-item">
+          <span className="post-meta-label">Created</span>
+          <span className="post-meta-value">{new Date(post.createdAt).toLocaleDateString()}</span>
+        </div>
+      </div>
+
+      <div className="button-group">
+        <button onClick={handleUpvote}>👍 Upvote ({upvotes})</button>
+        <button onClick={() => navigate(`/edit/${post.id}`)}>✏️ Edit</button>
+        <button onClick={handleDelete} style={{backgroundColor: '#ef4444'}}>🗑️ Delete</button>
+      </div>
+
+      <div className="comments-section">
+        <h3>💬 Comments ({comments.length})</h3>
+        {comments.length > 0 ? (
+          comments.map((c, i) => (
+            <div key={i} className="comment">
+              <p>{c}</p>
+            </div>
+          ))
+        ) : (
+          <p>No comments yet. Be the first to comment!</p>
+        )}
+
+        <form onSubmit={(e) => { e.preventDefault(); handleComment(); }} className="mt-2">
+          <textarea
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+            placeholder="Add your comment here..."
+            rows="3"
+          />
+          <button type="submit">Post Comment</button>
+        </form>
+      </div>
     </div>
   );
 }
