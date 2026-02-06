@@ -62,7 +62,7 @@ export default function LoginPortal() {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             autoFocus
-            autoComplete="username"
+            autoComplete="off"
           />
         </div>
         <div>

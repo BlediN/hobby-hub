@@ -76,6 +76,7 @@ export default function Login() {
             onChange={(e) => setUsername(e.target.value)}
             autoFocus
             maxLength={50}
+            autoComplete="off"
           />
           <small style={{ color: '#888', marginTop: '0.5rem' }}>
             Admin and Teacher roles available via Firebase login
