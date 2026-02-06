@@ -1,16 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { 
   setCurrentUser, 
-  getCurrentUser, 
-  ensureAdminPassword, 
-  verifyAdminPassword
+  getCurrentUser
 } from '../utils/userSession';
 
 export default function Login() {
   const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [initialAdminPassword, setInitialAdminPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
@@ -19,19 +15,6 @@ export default function Login() {
     navigate('/');
     return null;
   }
-
-  useEffect(() => {
-    const normalized = username.trim().toLowerCase();
-    if (normalized === 'admin') {
-      const result = ensureAdminPassword();
-      if (result.created) {
-        setInitialAdminPassword(result.password);
-      }
-    } else {
-      setInitialAdminPassword('');
-      setPassword('');
-    }
-  }, [username]);
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -58,18 +41,11 @@ export default function Login() {
       return;
     }
 
+    // Block admin and teacher - these are reserved roles for Firebase login only
     const normalized = username.trim().toLowerCase();
-
     if (normalized === 'admin') {
-      if (!password.trim()) {
-        setError('Admin password is required');
-        return;
-      }
-
-      if (!verifyAdminPassword(password.trim())) {
-        setError('Invalid admin password');
-        return;
-      }
+      setError(`"${normalized}" is a reserved role. Use Firebase login for admin access.`);
+      return;
     }
 
     if (setCurrentUser(username)) {
@@ -102,28 +78,9 @@ export default function Login() {
             maxLength={50}
           />
           <small style={{ color: '#888', marginTop: '0.5rem' }}>
-            Admin requires a password. Teacher is read-only.
+            Admin and Teacher roles available via Firebase login
           </small>
         </div>
-
-        {username.trim().toLowerCase() === 'admin' && (
-          <div style={{ marginTop: '1rem' }}>
-            <label htmlFor="password">Admin Password</label>
-            <input
-              id="password"
-              type="password"
-              placeholder="Enter admin password..."
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              autoComplete="current-password"
-            />
-            {initialAdminPassword && (
-              <div style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#fbbf24' }}>
-                Initial admin password: <strong>{initialAdminPassword}</strong>
-              </div>
-            )}
-          </div>
-        )}
 
         <button type="submit" style={{ marginTop: '1rem', width: '100%' }}>
           🚀 Enter HobbyHub
@@ -153,8 +110,8 @@ export default function Login() {
       >
         <h3>💡 Demo Usernames</h3>
         <ul style={{ margin: '0.5rem 0', paddingLeft: '1.5rem', fontSize: '0.9rem' }}>
-          <li><strong>admin</strong> - Full control (password required)</li>
-          <li><strong>teacher</strong> - Admin read-only</li>
+          <li><strong>admin</strong> - Admin access via Firebase login (reserved)</li>
+          <li><strong>teacher</strong> - Use to test Admin read-only portal</li>
           <li><strong>Any username</strong> - Create your own</li>
         </ul>
       </div>

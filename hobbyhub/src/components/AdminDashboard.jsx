@@ -5,8 +5,7 @@ import {
   isAdminViewer, 
   isTeacherUser, 
   getCurrentUser, 
-  logoutUser,
-  changeAdminPassword
+  logoutUser
 } from '../utils/userSession';
 import { 
   getSuspiciousActivityLogs, 
@@ -14,6 +13,11 @@ import {
   clearAllLogs,
   exportLogsAsJSON
 } from '../utils/ipBlocking';
+import { 
+  signInWithEmailAndPassword, 
+  updatePassword 
+} from 'firebase/auth';
+import { auth } from '../firebase';
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
@@ -93,7 +97,7 @@ export default function AdminDashboard() {
     }
   };
 
-  const handlePasswordChange = (e) => {
+  const handlePasswordChange = async (e) => {
     e.preventDefault();
     setPasswordMessage('');
 
@@ -102,16 +106,33 @@ export default function AdminDashboard() {
       return;
     }
 
-    const result = changeAdminPassword(currentPassword.trim(), newPassword.trim());
-    if (!result.ok) {
-      setPasswordMessage(result.error);
+    if (newPassword.trim().length < 8) {
+      setPasswordMessage('New password must be at least 8 characters.');
       return;
     }
 
-    setPasswordMessage('Admin password updated successfully.');
-    setCurrentPassword('');
-    setNewPassword('');
-    setConfirmPassword('');
+    try {
+      // Re-authenticate with Firebase using current password
+      const userEmail = currentUser.toLowerCase() === 'admin' 
+        ? 'admin@hobbyhub.local' 
+        : `${currentUser}@hobbyhub.local`;
+      
+      await signInWithEmailAndPassword(auth, userEmail, currentPassword.trim());
+      
+      // If successful, update password
+      await updatePassword(auth.currentUser, newPassword.trim());
+      
+      setPasswordMessage('Password updated successfully.');
+      setCurrentPassword('');
+      setNewPassword('');
+      setConfirmPassword('');
+    } catch (error) {
+      if (error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
+        setPasswordMessage('Current password is incorrect.');
+      } else {
+        setPasswordMessage('Error updating password. Please try again.');
+      }
+    }
   };
 
   // Get all authors
