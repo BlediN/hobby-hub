@@ -15,16 +15,51 @@ function ProtectedRoute({ element }) {
 }
 
 function App() {
+  const year = new Date().getFullYear();
   return (
-    <Routes>
-      <Route path="/login" element={<Login />} />
-      <Route path="/login-portal" element={<LoginPortal />} />
-      <Route path="/" element={<ProtectedRoute element={<Home />} />} />
-      <Route path="/create" element={<ProtectedRoute element={<CreatePost />} />} />
-      <Route path="/post/:id" element={<ProtectedRoute element={<PostPage />} />} />
-      <Route path="/edit/:id" element={<ProtectedRoute element={<EditPost />} />} />
-      <Route path="/admin" element={<ProtectedRoute element={<AdminDashboard />} />} />
-    </Routes>
+    <div className="app-shell">
+      <div className="app-content">
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/login-portal" element={<LoginPortal />} />
+          <Route path="/" element={<ProtectedRoute element={<Home />} />} />
+          <Route path="/create" element={<ProtectedRoute element={<CreatePost />} />} />
+          <Route path="/post/:id" element={<ProtectedRoute element={<PostPage />} />} />
+          <Route path="/edit/:id" element={<ProtectedRoute element={<EditPost />} />} />
+          <Route path="/admin" element={<ProtectedRoute element={<AdminDashboard />} />} />
+        </Routes>
+      </div>
+      <footer className="site-footer">
+        <div className="footer-inner">
+          <div className="footer-brand">
+            <h3>Ndoni, B</h3>
+            <p>Software Engineer · Located in USA</p>
+          </div>
+          <div className="footer-links">
+            <a className="footer-link" href="mailto:bledi_nd@hotmail.com">
+              <span className="footer-icon" aria-hidden="true">✉️</span>
+              Email
+            </a>
+            <a
+              className="footer-link"
+              href="https://www.linkedin.com/in/bndoni/"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <span className="footer-icon" aria-hidden="true">🔗</span>
+              LinkedIn
+            </a>
+            <a className="footer-link" href="https://github.com/BlediN" target="_blank" rel="noreferrer">
+              <span className="footer-icon" aria-hidden="true">🐙</span>
+              GitHub
+            </a>
+          </div>
+          <div className="footer-meta">
+            <p>(c) {year} Ndoni, B. All rights reserved.</p>
+          </div>
+        </div>
+      </footer>
+    </div>
   );
 }
 
