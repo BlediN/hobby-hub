@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { 
   setCurrentUser, 
   getCurrentUser, 
@@ -79,11 +79,13 @@ export default function Login() {
     }
   };
 
+
+
   return (
     <div className="container" style={{ maxWidth: '640px', marginTop: '5rem' }}>
       <h1>HobbyHub</h1>
       <h2>👋 Welcome</h2>
-      <p>Enter a username to get started</p>
+      <p>Enter a username or sign in with Firebase</p>
 
       {error && <div className="error">{error}</div>}
 
@@ -127,6 +129,18 @@ export default function Login() {
           🚀 Enter HobbyHub
         </button>
       </form>
+
+      <Link to="/login-portal" style={{ textDecoration: 'none' }}>
+        <button style={{
+          marginTop: '1.5rem',
+          width: '100%',
+          backgroundColor: '#10b981',
+          padding: '0.75rem',
+          fontSize: '1rem'
+        }}>
+          🔐 Login to Portal
+        </button>
+      </Link>
 
       <div
         style={{

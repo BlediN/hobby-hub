@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { isUserLoggedIn } from './utils/userSession';
 import Login from './components/Login';
+import LoginPortal from './components/LoginPortal';
 import Home from './pages/Home';
 import CreatePost from './components/CreatePost';
 import PostPage from './components/PostPage';
@@ -17,6 +18,7 @@ function App() {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
+      <Route path="/login-portal" element={<LoginPortal />} />
       <Route path="/" element={<ProtectedRoute element={<Home />} />} />
       <Route path="/create" element={<ProtectedRoute element={<CreatePost />} />} />
       <Route path="/post/:id" element={<ProtectedRoute element={<PostPage />} />} />
